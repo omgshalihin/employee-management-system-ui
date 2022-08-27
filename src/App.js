@@ -1,5 +1,14 @@
+import "./App.css";
+import AddEmployee from "./components/AddEmployee";
+import Navbar from "./components/Navbar";
+
 function App() {
-  return <div className="App"></div>;
+  return (
+    <>
+      <Navbar />
+      <AddEmployee />
+    </>
+  );
 }
 
 export default App;
