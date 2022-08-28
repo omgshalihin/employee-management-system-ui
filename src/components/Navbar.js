@@ -3,8 +3,8 @@ import React from "react";
 const Navbar = () => {
   return (
     <div className="bg-gray-800">
-      <div className="h-16 px-8 flex items-center">
-        <p className="text-white font-bold">Employee Management System</p>
+      <div className="flex h-16 items-center px-8">
+        <p className="font-bold text-white">Employee Management System</p>
       </div>
     </div>
   );
