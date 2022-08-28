@@ -1,50 +1,49 @@
-import React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import EmployeeService from "../services/EmployeeService";
 
-const AddEmployee = () => {
+const UpdateEmployee = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [employee, setEmployee] = useState({
-    id: "",
+    id: id,
     firstName: "",
     lastName: "",
     email: "",
   });
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const value = e.target.value;
     setEmployee({ ...employee, [e.target.name]: value });
   };
 
-  const saveEmployee = (e) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await EmployeeService.getEmployee(id);
+        setEmployee(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const updateEmployee = (e) => {
     e.preventDefault();
-    EmployeeService.saveEmployee(employee)
-      .then((response) => {
-        console.log(response);
+    EmployeeService.updateEmployee(id, employee)
+      .then((res) => {
         navigate("/employeeList");
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
-  const reset = (e) => {
-    e.preventDefault();
-    setEmployee({
-      id: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-    });
-  };
-
   return (
     <div className="mx-auto flex max-w-2xl border-b shadow">
       <div className="px-8 py-8">
         <div className="text-2xl font-thin tracking-wider">
-          <h1>Add New Employee</h1>
+          <h1>Update Employee</h1>
         </div>
         <div>
           <div className="my-4 h-14 w-full items-center justify-center">
@@ -89,15 +88,15 @@ const AddEmployee = () => {
           <div className="my-4 h-14 w-full items-center justify-center space-x-4 pt-4">
             <button
               className="rounded bg-green-400 py-2 px-6 font-semibold text-white hover:bg-green-700"
-              onClick={saveEmployee}
+              onClick={updateEmployee}
             >
-              Save
+              Update
             </button>
             <button
+              onClick={() => navigate("/employeeList")}
               className="rounded bg-red-400 py-2 px-6 font-semibold text-white hover:bg-red-700"
-              onClick={reset}
             >
-              Clear
+              Cancel
             </button>
           </div>
         </div>
@@ -106,4 +105,4 @@ const AddEmployee = () => {
   );
 };
 
-export default AddEmployee;
+export default UpdateEmployee;
